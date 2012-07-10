@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Facebook square crop</title>
+  <style>
+    /* Required styles */
+    .square {
+      overflow: hidden;
+      width: 100px;
+      height: 100px;
+    }
+    .square img {
+      position: relative;
+    }
+
+    .with-large .square {
+      width: 180px;
+      height: 180px;
+    }
+
+    /* Example fluff */
+    .square {
+      float: left;
+      margin: 10px;
+    }
+  </style>
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <script src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+  <script src="dist/facebook-square-crop.js"></script>
+  <script>
+    var fbLoaded = $.Deferred();
+    window.fbSquareCrop = new FacebookSquareCrop(fbLoaded);
+
+    window.fbAsyncInit = function() {
+      FB.init({
+      });
+      fbLoaded.resolve();
+    };
+
+    (function(d){
+      var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+      if (d.getElementById(id)) {return;}
+      js = d.createElement('script'); js.id = id; js.async = true;
+      js.src = "http://connect.facebook.net/en_US/all.js";
+      ref.parentNode.insertBefore(js, ref);
+    }(document));
+  </script>
+</head>
+<body>
+  <a href="https://github.com/tripdin/facebook-square-crop"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+
+  <div id="fb-root"></div>
+  <div class="from-fb" style="overflow:hidden">
+    <h1>From facebook (50x50px)</h1>
+  </div>
+  <div class="with" style="overflow:hidden">
+    <h1>Using pic_crop data (100x100px)</h1>
+  </div>
+  <div class="with-large" style="overflow:hidden">
+    <h1>Using pic_crop data (180x180px)</h1>
+  </div>
+  <div class="original" style="overflow:hidden">
+  	<h1>Originals</h1>
+  </div>
+  <script>
+    var ids = [
+      { facebookId: "4" },
+      { facebookId: "701756932" },
+      { facebookId: "717273996" },
+      { facebookId: "521261905" },
+    ];
+
+    var markup = '<div class="square"><img class="fbImage${facebookId}" data-fb-id="${facebookId}" src="http://graph.facebook.com/${facebookId}/picture?type=large"></div>';
+
+    $.template("facebookSquare", markup);
+
+    $.each(ids, function(i, value) {
+      $.tmpl("facebookSquare", value).appendTo(".with");
+      fbSquareCrop.debounce(value.facebookId);
+    });
+
+    $.each(ids, function(i, value) {
+      $.tmpl("facebookSquare", value).appendTo(".with-large");
+      fbSquareCrop.debounce(value.facebookId);
+    });
+    
+    $.each(ids, function(i, value) {
+      $('<div style="margin: 10px; float: left;"><img src="http://graph.facebook.com/' + value.facebookId + '/picture?type=large"></div>').appendTo('.original');
+    });
+    
+     $.each(ids, function(i, value) {
+      $('<div style="margin: 10px; float: left;"><img src="http://graph.facebook.com/' + value.facebookId + '/picture?type=square"></div>').appendTo('.from-fb');
+    });
+
+  </script>
+</body>
+</html>
