@@ -1,3 +1,10 @@
+# Update 2012-08-28
+There is now a way to get large square profile pictures directly from Facebook:
+
+    https://graph.facebook.com/4/picture?height=200&width=200
+    
+More info here: https://developers.facebook.com/bugs/417919131599758
+
 # Facebook square crop
 
 Facebook square crop is a small plugin that crops large Facebook profile pictures to square images larger than 50px (180x180px max). It queries the Facebook API for the [pic_crop](https://developers.facebook.com/docs/reference/fql/profile/pic_crop) field and calculates the correct offsets, directly client-side, in the browser.
